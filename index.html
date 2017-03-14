@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+    <title>vuxweather</title>
+  </head>
+  <body>
+    <div id="app">
+      请输入城市：<input v-model="cuty"></input>
+      <button v-on:click="getWeather">查询天气</button>
+      </br>未来5天{{city}}的情况
+      <div v-for="(item,index) in weather">
+			  {{item.date}}&nbsp{{item.fengli}}&nbsp{{item.type}}&nbsp{{item.low}}&nbsp{{item.hight}}
+		  </div>
+		  <p>07150924</p>
+	    <p>梁家言</p>
+    </div>
+    <!-- built files will be auto injected -->
+  </body>
+  <script src="https://unpkg.com/vue/dist/vue.js"></script>
+  <script src="https://unpkg.com/axios/dist/axios.js"></script>
+  <script>
+    Vue.prototype.$http = axios
+    let app  = new Vue({
+		  el:"#app",
+		  data:{
+			  baseurl:'http://wthrcdn.etouch.cn/weather_mini?city=',
+			  city:'广州',
+			  weather:[]
+		  },
+		  methods:{
+			  getWeather:function(){
+				  this.weather = []
+				  let url = this.baseurl+this.city
+				  this.$http.get(url)
+				  .then((res)=>{
+					  if (res.data.status === 1000) {
+						  this.weather = res.data.data.forecast
+					  }
+				  })
+			  }
+		  }
+	  })
+  </script>
+</html>
